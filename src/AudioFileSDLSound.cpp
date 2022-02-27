@@ -1,6 +1,6 @@
 #include <Gosu/Platform.hpp>
 
-#if !defined(GOSU_IS_IPHONE) && !defined(GOSU_IS_EMSCRIPTEN)
+#if !defined(GOSU_IS_IPHONE)
 
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"

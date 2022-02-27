@@ -1,14 +1,33 @@
 #!/bin/bash
+set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 mkdir -p "$SCRIPT_DIR/emscripten-output"
 
+# Build SDL_Sound - this needs to be done separately since it's a C project, not C++
+pushd "$SCRIPT_DIR/emscripten-output"
+mkdir -p sdl_sound
+cd sdl_sound
+emcc \
+    $SCRIPT_DIR/dependencies/SDL_sound/*.c \
+    $SCRIPT_DIR/dependencies/SDL_sound/libmodplug/*.c \
+    $SCRIPT_DIR/dependencies/SDL_sound/libmodplug/*.c \
+    -I"$SCRIPT_DIR/dependencies/SDL_sound" \
+    -I"$SCRIPT_DIR/dependencies/SDL_sound/libmodplug" \
+    -s USE_SDL=2 \
+    -c
+popd
+
+# Build Gosu
 emcc \
     $SCRIPT_DIR/src/*.cpp \
+    $SCRIPT_DIR/emscripten-output/sdl_sound/*.o \
     -I"$SCRIPT_DIR/include" \
     -I"$SCRIPT_DIR/dependencies/stb" \
     -I"$SCRIPT_DIR/dependencies/utf8proc" \
+    -I"$SCRIPT_DIR/dependencies/SDL_sound" \
+    -I"$SCRIPT_DIR/dependencies/SDL_sound/libmodplug" \
     -std=c++17 \
     -s USE_SDL=2 \
     -s LEGACY_GL_EMULATION=1 \

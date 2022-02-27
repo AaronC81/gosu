@@ -4,6 +4,7 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Input.hpp>
+#include <Gosu/Audio.hpp>
 
 #include <iostream>
 #include <emscripten.h>
@@ -13,7 +14,7 @@
 class GameWindow : public Gosu::Window
 {
 public:
-    GameWindow() : Window(500, 500), i("shark.png"), x(20.0), y(20.0) {}
+    GameWindow() : Window(500, 500), i("shark.png"), s("sound.wav"), x(20.0), y(20.0) {}
 
     void draw() override
     {
@@ -34,8 +35,13 @@ public:
         }
     }
 
+    void button_down(Gosu::Button btn) override {
+        s.play();
+    }
+
 private:
     Gosu::Image i;
+    Gosu::Sample s;
 
     double x;
     double y;

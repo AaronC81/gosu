@@ -6,10 +6,10 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/Audio.hpp>
 
+#ifdef GOSU_IS_EMSCRIPTEN
+
 #include <iostream>
 #include <emscripten.h>
-
-#ifdef GOSU_IS_EMSCRIPTEN
 
 class GameWindow : public Gosu::Window
 {

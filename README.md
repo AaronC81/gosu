@@ -1,31 +1,32 @@
-Welcome to Gosu!
-================
+# Gosu for Emscripten
 
-Gosu is a 2D game development library for Ruby and C++.
+This is a **highly experimental** prototype of the [Gosu game engine](https://github.com/gosu/gosu)
+running under Emscripten.
 
-The main website is [www.libgosu.org](https://www.libgosu.org/).
-The source code, wiki, issue tracker and change log are all hosted on [GitHub](https://github.com/gosu/gosu).
+Only games written in C++ can run like this - no Ruby support yet.
 
-Gosu is released under the MIT license.
+There are definitely things that don't work, but the following features are tested working:
 
-Getting Started
----------------
+- Drawing rectangles
+- Drawing images
+- Keyboard input
+- Playing samples
 
-The best entry point into Gosu's documentation is the [wiki home page](https://github.com/gosu/gosu/wiki).
-Try doing the tutorials there if you don't know how to get started,
-or look at existing projects in the [Gosu Showcase](https://www.libgosu.org/cgi-bin/mwf/board_show.pl?bid=2).
+## How do I use it?
 
-Community
----------
+As prerequisites, you will need:
 
-- There is a lively [Discord community](https://discord.gg/5nEBXDc).
-- If you want to discuss or announce something in a more permanent place than a chat room, we also have a [message board](https://www.libgosu.org/cgi-bin/mwf/forum.pl).
-- Please file bugs and feature requests [on GitHub](https://github.com/gosu/gosu/issues).
+1. The Emscripten SDK, such that `emcc` is on your PATH. On macOS, I grabbed this with
+   `brew install emscripten`.
+2. Some way of hosting a local web server - Python will do!
 
-Build Status
-------------
+The code of the example game is in `src/EmscriptenMain.cpp`, but you can change the structure as
+much as you like as long as there's a definition of `int main()` somewhere.
 
-Platforms| 
----|---:
-Linux, macOS and iOS|[![Travis build status](https://travis-ci.org/gosu/gosu.svg?branch=master)](https://travis-ci.org/gosu/gosu)
-Windows|[![Appveyor build status](https://ci.appveyor.com/api/projects/status/v0liohs47jono1eq?svg=true)](https://ci.appveyor.com/project/gosu-ci/gosu)
+To build everything, run `emscripten-build`! Then start a web server in `emscripten-output` and
+navigate to `out.html`. (If you have Python, you can run `python -m http.server` in that directory,
+and then navigate to `localhost:8000/out.html` in your browser.)
+
+Any assets used by the game can be put into the `emscripten-assets` directory. The apparent
+current working directory of the game when it runs in your browser will be inside this folder, so
+you could load a file named `sprite.png` with `Gosu::Image("sprite.png")`.

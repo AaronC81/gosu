@@ -7,11 +7,15 @@
 # if defined(__linux) || defined(__FreeBSD__)
 #  define GOSU_IS_X
 # else
-#  define GOSU_IS_MAC
-#  include <TargetConditionals.h>
-#  if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-#   define GOSU_IS_IPHONE
-#   define GOSU_IS_OPENGLES
+#  if defined(EMSCRIPTEN) || defined(__EMSCRIPTEN__)
+#   define GOSU_IS_EMSCRIPTEN
+#  else
+#   define GOSU_IS_MAC
+#   include <TargetConditionals.h>
+#   if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#    define GOSU_IS_IPHONE
+#    define GOSU_IS_OPENGLES
+#   endif
 #  endif
 # endif
 #endif

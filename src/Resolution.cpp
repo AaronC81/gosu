@@ -160,12 +160,20 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 
 int Gosu::available_width(Window* window)
 {
+#ifdef GOSU_IS_EMSCRIPTEN
+    return 500;
+#else
     return max_window_size(window).w;
+#endif
 }
 
 int Gosu::available_height(Window* window)
 {
+#ifdef GOSU_IS_EMSCRIPTEN
+    return 500;
+#else
     return max_window_size(window).h;
+#endif
 }
 
 #endif

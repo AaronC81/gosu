@@ -31,3 +31,5 @@
 /windows/*.opensdf
 /windows/Gosu.VC.db
 /examples/Tutorial.*
+
+/emscripten-output

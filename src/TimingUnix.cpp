@@ -1,5 +1,5 @@
 #include <Gosu/Platform.hpp>
-#if defined(GOSU_IS_X)
+#if defined(GOSU_IS_X) || defined(GOSU_IS_EMSCRIPTEN)
 
 #include <Gosu/Timing.hpp>
 #include <sys/time.h>

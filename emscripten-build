@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+mkdir -p "$SCRIPT_DIR/emscripten-output"
+
+emcc \
+    $SCRIPT_DIR/src/*.cpp \
+    -I"$SCRIPT_DIR/include" \
+    -I"$SCRIPT_DIR/dependencies/stb" \
+    -I"$SCRIPT_DIR/dependencies/utf8proc" \
+    -std=c++17 \
+    -s USE_SDL=2 \
+    -s LEGACY_GL_EMULATION=1 \
+    -o "$SCRIPT_DIR/emscripten-output/out.html"

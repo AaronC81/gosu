@@ -12,4 +12,7 @@ emcc \
     -std=c++17 \
     -s USE_SDL=2 \
     -s LEGACY_GL_EMULATION=1 \
+    -s GL_UNSAFE_OPTS=0 \
+    -s NO_DISABLE_EXCEPTION_CATCHING=1 \
+    --preload-file "$SCRIPT_DIR/emscripten-assets@/" \
     -o "$SCRIPT_DIR/emscripten-output/out.html"

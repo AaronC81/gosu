@@ -2,24 +2,30 @@
 #include <Gosu/Window.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
+#include <Gosu/Image.hpp>
+
+#include <iostream>
+#include <emscripten.h>
 
 #ifdef GOSU_IS_EMSCRIPTEN
 
 class GameWindow : public Gosu::Window
 {
 public:
-    GameWindow() : Window(500, 500) {}
+    GameWindow() : Window(500, 500), i("shark.png") {}
 
     void draw() override
     {
         Gosu::Graphics::draw_rect(
             Gosu::random(0.0, 350.0), Gosu::random(0.0, 350.0), 100.0, 100.0, Gosu::Color::WHITE, 0
         );
-    }
-};
 
-#include <iostream>
-#include <emscripten.h>
+        i.draw(20.0, 20.0);
+    }
+
+private:
+    Gosu::Image i;
+};
 
 GameWindow window;
 

@@ -25,7 +25,7 @@ Gosu::Texture::Texture(unsigned width, unsigned height, bool retro)
 
     // Create empty texture.
     glBindTexture(GL_TEXTURE_2D, tex_name_);
-#ifdef GOSU_IS_OPENGLES
+#if defined(GOSU_IS_OPENGLES) || defined(GOSU_IS_EMSCRIPTEN)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator_.width(), allocator_.height(), 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, nullptr);
 #else
@@ -112,10 +112,13 @@ void Gosu::Texture::free(unsigned x, unsigned y, unsigned width, unsigned height
 
 Gosu::Bitmap Gosu::Texture::to_bitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
 {
-#ifdef GOSU_IS_OPENGLES
+#if defined(GOSU_IS_OPENGLES)
     // See here for one possible implementation: https://github.com/apitrace/apitrace/issues/70
     // (Could reuse a lot of code from OffScreenTarget)
     throw logic_error("Texture::to_bitmap not supported on iOS");
+#elif defined(GOSU_IS_EMSCRIPTEN)
+    // Doesn't provide `glGetTexImage`
+    throw logic_error("Texture::to_bitmap not supported on Emscripten");
 #else
     ensure_current_context();
     

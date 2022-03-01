@@ -123,7 +123,7 @@ struct Gosu::Macro::Impl : Gosu::Noncopyable
         // They should be premultiplied and have the same transform by definition. Then the
         // transformation only has to be performed once.
 
-#ifndef GOSU_IS_OPENGLES
+#if !defined(GOSU_IS_OPENGLES) && !defined(GOSU_IS_EMSCRIPTEN)
         glEnable(GL_BLEND);
         glMatrixMode(GL_MODELVIEW);
 

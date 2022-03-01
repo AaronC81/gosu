@@ -2,6 +2,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/Platform.hpp>
 #include "DrawOp.hpp"
 #include "DrawOpQueue.hpp"
 #include "GraphicsImpl.hpp"
@@ -62,7 +63,7 @@ struct Gosu::Graphics::Impl : Gosu::Noncopyable
         base_transform = concat(translate_transform, scale_transform);
     }
 
-#ifndef GOSU_IS_OPENGLES
+#if !defined(GOSU_IS_OPENGLES) && !defined(GOSU_IS_EMSCRIPTEN)
     void begin_gl() // NOLINT(readability-convert-member-functions-to-static)
     {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -220,8 +221,8 @@ void Gosu::Graphics::gl(const std::function<void()>& f)
         throw std::logic_error{"Custom OpenGL is not allowed while creating a macro"};
     }
 
-#ifdef GOSU_IS_OPENGLES
-    throw std::logic_error{"Custom OpenGL ES is not supported yet"};
+#if defined(GOSU_IS_OPENGLES) || defined(GOSU_IS_EMSCRIPTEN)
+    throw std::logic_error{"Custom OpenGL ES or Emscripten GL is not supported yet"};
 #else
     Graphics& cg = current_graphics();
 
@@ -237,8 +238,8 @@ void Gosu::Graphics::gl(const std::function<void()>& f)
 
 void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void()>& f)
 {
-#ifdef GOSU_IS_OPENGLES
-    throw std::logic_error{"Custom OpenGL ES is not supported yet"};
+#if defined(GOSU_IS_OPENGLES) || defined(GOSU_IS_EMSCRIPTEN)
+    throw std::logic_error{"Custom OpenGL ES or Emscripten GL is not supported yet"};
 #else
     const auto wrapped_f = [f] {
         Graphics& cg = current_graphics();
@@ -281,7 +282,7 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const std::function<vo
 
     // This is the actual render-to-texture step.
     Image result = OffScreenTarget(width, height, image_flags).render([&] {
-#ifndef GOSU_IS_OPENGLES
+#if !defined(GOSU_IS_OPENGLES) && !defined(GOSU_IS_EMSCRIPTEN)
         glPushAttrib(GL_ALL_ATTRIB_BITS);
 #endif
         glClearColor(0, 0, 0, 0);
@@ -292,7 +293,7 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const std::function<vo
         queues.back().perform_draw_ops_and_code();
         queues.pop_back();
         glFlush();
-#ifndef GOSU_IS_OPENGLES
+#if !defined(GOSU_IS_OPENGLES) && !defined(GOSU_IS_EMSCRIPTEN)
         glPopAttrib();
 #endif
     });

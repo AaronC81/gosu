@@ -17,50 +17,30 @@ emcc \
     -s USE_SDL=2 \
     -fPIC \
     -c
-    #-m64 \
 popd
 
 emcc $SCRIPT_DIR/dependencies/utf8proc/utf8proc.c -fPIC -c
-#cp $SCRIPT_DIR/dependencies/utf8proc/utf8proc.o "$SCRIPT_DIR/emscripten-output/utf8proc.o"
-
-    # -I"/opt/homebrew/Cellar/ruby/3.0.3/include/ruby-3.0.0/" \
-    # -I"/opt/homebrew/Cellar/ruby/3.0.3/include/ruby-3.0.0/ruby" \
-    # -I"/opt/homebrew/Cellar/ruby/3.0.3/include/ruby-3.0.0/arm64-darwin21" \
-
-    # -s LEGACY_GL_EMULATION=1 \
-    # -s GL_UNSAFE_OPTS=0 \
-    # -s NO_DISABLE_EXCEPTION_CATCHING=1 \
-    # -s SIDE_MODULE \
-    # -s ASSERTIONS=1 \
-    # -s LINKABLE=1 -s EXPORT_ALL=1 \
-
 
 # Build Gosu
-# (Yikes at that hardcoded SDK path)
 mkdir -p gosu
 pushd gosu
 emcc \
     $SCRIPT_DIR/src/*.cpp \
-    $SCRIPT_DIR/src/*.cxx \
+    $SCRIPT_DIR/ffi/*.cpp \
     $SCRIPT_DIR/emscripten-output/sdl_sound/*.o \
     -I"$SCRIPT_DIR/include" \
+    -I"$SCRIPT_DIR/ffi" \
     -I"$SCRIPT_DIR/dependencies/stb" \
     -I"$SCRIPT_DIR/dependencies/utf8proc" \
     -I"$SCRIPT_DIR/dependencies/SDL_sound" \
     -I"$SCRIPT_DIR/dependencies/SDL_sound/libmodplug" \
-    -I"/Users/aaron/.asdf/installs/ruby/3.0.2/include" \
-    -I"/Users/aaron/.asdf/installs/ruby/3.0.2/include/ruby-3.0.0" \
-    -I"/Users/aaron/.asdf/installs/ruby/3.0.2/include/ruby-3.0.0/ruby" \
-    -I"/Users/aaron/.asdf/installs/ruby/3.0.2/include/ruby-3.0.0/ruby/backward" \
-    -I"/Users/aaron/.asdf/installs/ruby/3.0.2/include/ruby-3.0.0/arm64-darwin21" \
     -D"assert(x)=x" \
     -Dregister= \
     -std=gnu++17 \
     -c \
-    -O0 \
+    -O3 \
     -g \
     -fPIC \
-    -s USE_SDL=2 \
-    --preload-file "$SCRIPT_DIR/emscripten-assets@/"
+    -s USE_SDL=2
 popd
 popd

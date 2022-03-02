@@ -16,7 +16,8 @@ emcc \
     -I"$SCRIPT_DIR/dependencies/SDL_sound/libmodplug" \
     -s USE_SDL=2 \
     -fPIC \
-    -c
+    -c \
+    -g
 popd
 
 emcc $SCRIPT_DIR/dependencies/utf8proc/utf8proc.c -fPIC -c
@@ -38,7 +39,7 @@ emcc \
     -Dregister= \
     -std=gnu++17 \
     -c \
-    -O3 \
+    -O0 \
     -g \
     -fPIC \
     -s USE_SDL=2

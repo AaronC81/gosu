@@ -6,6 +6,11 @@
 #include <windows.h>
 #endif
 
+#ifdef GOSU_IS_EMSCRIPTEN
+#include <emscripten.h>
+#include <emscripten/html5.h>
+#endif
+
 #include <Gosu/Gosu.hpp>
 #include "GraphicsImpl.hpp"
 #include <SDL.h>
@@ -261,6 +266,19 @@ void Gosu::Window::set_caption(const std::string& caption)
 
 void Gosu::Window::show()
 {
+#ifdef GOSU_IS_EMSCRIPTEN
+    printf("Using special Emscripten show...\n");
+    // TODO: assumes browser is rendering at 60fps
+    auto render = [](double time, void* window) {
+        ((Gosu::Window*)window)->tick();
+        return EM_TRUE;
+    };
+
+    emscripten_request_animation_frame_loop(render, (void*)this);
+
+    return;
+#endif
+
     unsigned long time_before_tick = milliseconds();
 
 #ifdef GOSU_IS_WIN
